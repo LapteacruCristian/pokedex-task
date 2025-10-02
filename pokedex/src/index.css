@@ -1,68 +1,189 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  color: #000000;
+  background-color: #f6f5f4;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  --radius: 0.65rem;
+  --background: #faf9f5;
+  --foreground: #3d3929;
+  --card: #faf9f5;
+  --card-foreground: #141413;
+  --popover: #ffffff;
+  --popover-foreground: #28261b;
+  --primary: #b65839;
+  --primary-foreground: #ffffff;
+  --secondary: #e9e6dc;
+  --secondary-foreground: #535146;
+  --muted: #ede9de;
+  --muted-foreground: #83827d;
+  --accent: #e9e6dc;
+  --accent-foreground: #28261b;
+  --destructive: #ef4444;
+  --destructive-foreground: #faf9f5;
+  --border: #d4d4da;
+  --input: #b4b2a7;
+  --ring: #c96442;
+  --chart-1: #b05730;
+  --chart-2: #9c87f5;
+  --chart-3: #ded8c4;
+  --chart-4: #dbd3f0;
+  --chart-5: #b4552d;
+  --sidebar: #f5f4ee;
+  --sidebar-foreground: #3d3d3a;
+  --sidebar-primary: #c96442;
+  --sidebar-primary-foreground: #fbfbfb;
+  --sidebar-accent: #e9e6dc;
+  --sidebar-accent-foreground: #343434;
+  --sidebar-border: #ebebeb;
+  --sidebar-ring: #b5b5b5;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
+@media (prefers-color-scheme: dark) {
   :root {
-    color: #213547;
-    background-color: #ffffff;
+    --background: #262624;
+    --foreground: #c3c0b6;
+    --card: #262624;
+    --card-foreground: #faf9f5;
+    --popover: #30302e;
+    --popover-foreground: #e5e5e2;
+    --primary: #d97757;
+    --primary-foreground: #ffffff;
+    --secondary: #faf9f5;
+    --secondary-foreground: #30302e;
+    --muted: #1b1b19;
+    --muted-foreground: #b7b5a9;
+    --accent: #1a1915;
+    --accent-foreground: #f5f4ee;
+    --destructive: #ef4444;
+    --destructive-foreground: #ffffff;
+    --border: #3e3e38;
+    --input: #52514a;
+    --ring: #d97757;
+    --chart-1: #b05730;
+    --chart-2: #9c87f5;
+    --chart-3: #1a1915;
+    --chart-4: #2f2b48;
+    --chart-5: #b4552d;
+    --sidebar: #1f1e1d;
+    --sidebar-foreground: #c3c0b6;
+    --sidebar-primary: #343434;
+    --sidebar-primary-foreground: #fbfbfb;
+    --sidebar-accent: #0f0f0e;
+    --sidebar-accent-foreground: #c3c0b6;
+    --sidebar-border: #ebebeb;
+    --sidebar-ring: #b5b5b5;
   }
-  a:hover {
-    color: #747bff;
+}
+
+@theme {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+}
+
+@layer base {
+  * {
+    @apply box-border border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground min-w-[320px] min-h-screen h-screen;
+    transition:
+      background-color 0.3s ease,
+      color 0.3s ease;
+  }
+  #root {
+    @apply h-full;
+  }
+  main {
+    @apply max-w-7xl mx-auto text-center h-auto w-11/12 lg:w-9/12 py-4;
   }
   button {
-    background-color: #f9f9f9;
+    @apply cursor-pointer;
+  }
+}
+
+@layer utilities {
+  .type-grass {
+    @apply text-green-950 bg-green-300/80;
+  }
+  .type-fire {
+    @apply text-red-950 bg-red-300/80;
+  }
+  .type-water {
+    @apply text-blue-950 bg-blue-400/80;
+  }
+  .type-fairy {
+    @apply text-pink-950 bg-pink-300/90;
+  }
+  .type-bug {
+    @apply text-green-950 bg-green-400/80;
+  }
+  .type-normal {
+    @apply text-gray-900 bg-gray-300/80;
+  }
+  .type-poison {
+    @apply text-purple-950 bg-purple-300/90;
+  }
+  .type-electric {
+    @apply text-yellow-950 bg-yellow-200;
+  }
+  .type-ground {
+    @apply text-yellow-950 bg-yellow-400/70;
+  }
+  .type-fighting {
+    @apply text-red-100 bg-red-700/90;
+  }
+  .type-psychic {
+    @apply text-pink-950 bg-pink-200/80;
+  }
+  .type-rock {
+    @apply text-yellow-100 bg-yellow-800/90;
+  }
+  .type-ghost {
+    @apply text-purple-950 bg-purple-200/70;
+  }
+  .type-ice {
+    @apply text-blue-950 bg-blue-200/50;
+  }
+  .type-flying {
+    @apply text-blue-950 bg-blue-300/80;
+  }
+  .type-dragon {
+    @apply text-rose-950 bg-rose-200/90;
+  }
+  .type-dark {
+    @apply text-gray-100 bg-gray-600;
+  }
+  .type-steel {
+    @apply text-gray-950 bg-gray-200;
   }
 }
