@@ -1,52 +1,59 @@
 import { useParams } from "react-router-dom";
 import usePokemonDetailsQuery from "../hooks/usePokemonDetailsQuery";
+import PokemonCardDetails from "@/components/PokemonCardDetails";
+import Loader from "@/components/Loader";
+import ErrorCard from "@/components/ErrorCard";
+import { usePokemonSpeciesQuery } from "@/hooks/usePokemonSpeciesQuery";
+import usePokemonWeaknessesQuery from "@/hooks/usePokemonWeaknessesQuery";
 
 function PokemonDetailsPage() {
   const { name } = useParams();
 
-  const { data, isLoading, error } = usePokemonDetailsQuery({
+  const {
+    data: pokemon,
+    isLoading,
+    error,
+  } = usePokemonDetailsQuery({
     idOrName: name!,
   });
 
-  if (isLoading) return <p>Loading...</p>;
-  if (error) return <p>Error loading Pokémon details.</p>;
+  const species = usePokemonSpeciesQuery({
+    id: pokemon?.id,
+    name: name?.split("-")[0],
+  });
+  const weaknesses = usePokemonWeaknessesQuery({ types: pokemon?.types });
+
+  if (isLoading || species?.isLoading || weaknesses?.isLoading)
+    return (
+      <div className="flex flex-col justify-center items-center h-screen">
+        <Loader />
+      </div>
+    );
+
+  if (error || species?.error || weaknesses?.error)
+    return (
+      <div className="flex flex-col justify-center items-center h-screen">
+        <ErrorCard
+          title="Unable to fetch the Pokémon details."
+          description="Please check your internet connection or try again later."
+          message={
+            error?.message ||
+            species?.error?.message ||
+            weaknesses?.error?.message
+          }
+        />
+      </div>
+    );
+
   return (
     <main>
-      <div>
-        {data && (
-          <>
-            <span className="text-muted">#{data.id}</span>
-            <h2>{data.name}</h2>
-            <img src={data.sprites.front_default} alt={data.name} />
-            <p>Height: {data.height}</p>
-            <p>Weight: {data.weight}</p>
-            <p>
-              Types:{" "}
-              {data.types
-                .map((type: { type: { name: any } }) => type.type.name)
-                .join(", ")}
-            </p>
-            <p>
-              Abilities:{" "}
-              {data.abilities
-                .map(
-                  (ability: { ability: { name: any } }) => ability.ability.name
-                )
-                .join(", ")}
-            </p>
-            <div>
-              Stats:
-              <ul>
-                {data.stats.map(
-                  (stat: { stat: { name: any }; base_stat: any }) => (
-                    <li key={stat.stat.name}>
-                      {stat.stat.name}: {stat.base_stat}
-                    </li>
-                  )
-                )}
-              </ul>
-            </div>
-          </>
+      <div className="py-20">
+        {pokemon && species?.data && (
+          <PokemonCardDetails
+            pokemon={pokemon}
+            species={species.data}
+            weaknesses={weaknesses.data}
+          />
         )}
       </div>
     </main>

@@ -1,4 +1,3 @@
-import "./App.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import PokemonDetailsPage from "./pages/PokemonDetailsPage";
 import PokedexPage from "./pages/PokedexPage";

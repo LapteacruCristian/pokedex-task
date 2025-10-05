@@ -1,24 +1,30 @@
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { cn } from "@/lib/utils";
 import { AlertCircleIcon } from "lucide-react";
 
 interface ErrorCardProps {
   title: string;
   description?: string;
   message?: string;
+  className?: React.HTMLAttributes<HTMLDivElement>["className"];
 }
 
 export default function ErrorCard({
   title,
   description,
   message,
+  className,
 }: ErrorCardProps) {
   return (
-    <Alert variant="destructive" className="sm:w-9/12 lg:w-6/12 mx-auto">
+    <Alert
+      variant="destructive"
+      className={cn("max-w-[500px] mx-auto border-destructive", className)}
+    >
       <AlertCircleIcon />
       <AlertTitle className="text-center">{title}</AlertTitle>
       <AlertDescription>
-        {description && <p>{description}</p>}
-        <p>{message}</p>
+        {description && <span>{description}</span>}
+        <span>{message}</span>
       </AlertDescription>
     </Alert>
   );

@@ -19,7 +19,7 @@ function PokedexPage() {
 
   const searchTermdebounced = useDebounce(searchTerm, 1000);
 
-  const { data, isLoading, error } = usePokemonsDetailsQuery(page, perPage);
+  const { data, isLoading, error } = usePokemonsDetailsQuery({ page, perPage });
 
   const {
     data: searchData,
@@ -31,11 +31,11 @@ function PokedexPage() {
 
   if (error) {
     return (
-      <div className="flex flex-col justify-center items-center h-full">
+      <div className="flex flex-col justify-center items-center h-screen">
         <ErrorCard
           title="Unable to fetch the Pokémon data."
           description="Please check your internet connection or try again later."
-          message={error!.message}
+          message={error?.message}
         />
       </div>
     );
@@ -43,30 +43,32 @@ function PokedexPage() {
 
   return (
     <main>
-      <div className="pb-16 md:w-9/12 mx-auto">
-        <SearchBar
-          placeholder="Search your Pokémon!"
-          disabled={isLoading}
-          searchTerm={searchTerm}
-          onChange={setSearchTerm}
-        />
-      </div>
+      <SearchBar
+        className="mb-16"
+        placeholder="Search your Pokémon!"
+        disabled={isLoading}
+        searchTerm={searchTerm}
+        onChange={setSearchTerm}
+      />
 
       {isLoading || isSearchLoading ? (
         <Loader />
       ) : searchError ? (
-        <ErrorCard title="No Pokémon match your search." />
+        <ErrorCard
+          title="No Pokémon match your search."
+          description="Please check the name and try again."
+        />
       ) : (
         <section>
-          <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-16">
+          <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-16">
             {searchData ? (
               <li key={searchData.id}>
-                <PokemonCardPreview key={searchData.id} pokemon={searchData!} />
+                <PokemonCardPreview key={searchData.id} pokemon={searchData} />
               </li>
             ) : (
               data.results.map((pokemon) => (
-                <li key={pokemon!.id}>
-                  <PokemonCardPreview pokemon={pokemon!} />
+                <li key={pokemon.id}>
+                  <PokemonCardPreview pokemon={pokemon} />
                 </li>
               ))
             )}

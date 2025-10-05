@@ -1,14 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 import { fetchPokemonDetails } from "../lib/api";
-
-interface PokemonDetailsQueryProps {
-  idOrName: string | number;
-}
+import type { Pokemon } from "../lib/types";
 
 export default function usePokemonDetailsQuery({
   idOrName,
-}: PokemonDetailsQueryProps) {
-  return useQuery({
+}: {
+  idOrName: number | string;
+}) {
+  return useQuery<Pokemon>({
     queryKey: ["pokemon", idOrName],
     queryFn: () => fetchPokemonDetails(idOrName),
     enabled: !!idOrName,

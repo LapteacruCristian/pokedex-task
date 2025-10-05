@@ -2,7 +2,7 @@ import ErrorCard from "../components/ErrorCard";
 
 export default function NotFoundPage() {
   return (
-    <div className="flex flex-col justify-center items-center h-full">
+    <div className="flex flex-col justify-center items-center h-screen">
       <ErrorCard
         title="404 Not Found"
         description="Oops! The page you're looking for doesn't exist."

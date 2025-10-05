@@ -1,31 +1,28 @@
 import { useQueries } from "@tanstack/react-query";
 import { fetchPokemonDetails } from "../lib/api";
 import usePokemonsQuery from "./usePokemonsQuery";
-
-interface Pokemon {
-  id: number;
-  name: string;
-  sprites: {
-    front_default: string;
-  };
-  types: Array<{ type: { name: string } }>;
-}
+import type { PokemonPreview } from "../lib/types";
 
 interface PokemonsDetailsResult {
   data: {
     count: number;
     next: string | null;
     previous: string | null;
-    results: Array<Pokemon>;
+    results: Array<PokemonPreview>;
   };
   isLoading: boolean;
   error: Error | null;
 }
 
-export default function usePokemonsDetailsQuery(
-  page: number,
-  perPage: number = 20
-): PokemonsDetailsResult {
+interface PokemonsDetailsProps {
+  page: number;
+  perPage?: number;
+}
+
+export default function usePokemonsDetailsQuery({
+  page,
+  perPage = 20,
+}: PokemonsDetailsProps): PokemonsDetailsResult {
   const {
     data: listData,
     error: listError,

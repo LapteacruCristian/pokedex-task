@@ -37,7 +37,7 @@
   --chart-1: #b05730;
   --chart-2: #9c87f5;
   --chart-3: #ded8c4;
-  --chart-4: #dbd3f0;
+  --chart-4: #030303;
   --chart-5: #b4552d;
   --sidebar: #f5f4ee;
   --sidebar-foreground: #3d3d3a;
@@ -110,24 +110,39 @@
 }
 
 @layer base {
-  * {
+  *,
+  *::before,
+  *::after {
     @apply box-border border-border outline-ring/50;
   }
 
   body {
-    @apply bg-background text-foreground min-w-[320px] min-h-screen h-screen;
-    transition:
-      background-color 0.3s ease,
-      color 0.3s ease;
+    @apply bg-background text-foreground min-w-[320px] min-h-screen text-sm sm:text-base;
+    transition: all 0.3s ease-in-out;
   }
   #root {
-    @apply h-full;
+    @apply min-h-full;
   }
   main {
     @apply max-w-7xl mx-auto text-center h-auto w-11/12 lg:w-9/12 py-4;
   }
   button {
     @apply cursor-pointer;
+  }
+  h1 {
+    @apply text-xl sm:text-2xl font-bold;
+  }
+  h2 {
+    @apply text-lg sm:text-xl font-bold;
+  }
+  h3 {
+    @apply text-base sm:text-lg font-semibold;
+  }
+  h4 {
+    @apply text-base sm:text-lg font-semibold;
+  }
+  p {
+    @apply text-sm sm:text-base text-muted-foreground font-normal;
   }
 }
 
