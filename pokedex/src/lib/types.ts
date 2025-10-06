@@ -20,9 +20,16 @@ export interface Pokemon {
   base_experience: number;
   sprites: {
     front_default: string;
+    front_female: string | null;
     other: {
       "official-artwork": {
         front_default: string;
+      };
+      dream_world: {
+        front_female: string | null;
+      };
+      home: {
+        front_female: string | null;
       };
     };
   };
@@ -46,6 +53,9 @@ export interface PokemonSpecies {
       url: string;
     };
   }>;
+  evolution_chain: {
+    url: string;
+  };
   gender_rate: number;
 }
 

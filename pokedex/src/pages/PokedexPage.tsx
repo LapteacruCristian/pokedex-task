@@ -1,17 +1,17 @@
-import { useSearchParams } from "react-router-dom";
+import { Navigate, useSearchParams } from "react-router-dom";
 import PokemonCardPreview from "../components/PokemonCardPreview";
-import usePokemonsDetailsQuery from "../hooks/usePokemonsDetailsQuery";
 import ErrorCard from "@/components/ErrorCard";
 import Loader from "@/components/Loader";
-import usePokemonDetailsQuery from "@/hooks/usePokemonDetailsQuery";
+import { usePokemonQuery } from "../hooks/usePokemon";
 import SearchBar from "@/components/SearchBar";
 import GridPagination from "@/components/GridPagination";
 import { useState } from "react";
 import useDebounce from "@/hooks/useDebounce";
+import { usePokemonsQuery } from "@/hooks/usePokemon";
 
 function PokedexPage() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const page = parseInt(searchParams.get("page") || "1");
+  const page = Number(searchParams.get("page") || "1");
 
   const perPage = 20;
 
@@ -19,15 +19,19 @@ function PokedexPage() {
 
   const searchTermdebounced = useDebounce(searchTerm, 1000);
 
-  const { data, isLoading, error } = usePokemonsDetailsQuery({ page, perPage });
+  const { data, isLoading, error } = usePokemonsQuery({ page, perPage });
 
   const {
     data: searchData,
     isLoading: isSearchLoading,
     error: searchError,
-  } = usePokemonDetailsQuery({
+  } = usePokemonQuery({
     idOrName: searchTermdebounced.trim().toLowerCase().replace(/\s+/g, "-"),
   });
+
+  if (page < 1 || isNaN(page)) {
+    return <Navigate to="/404" />;
+  }
 
   if (error) {
     return (

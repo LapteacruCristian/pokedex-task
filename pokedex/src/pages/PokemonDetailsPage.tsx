@@ -1,34 +1,51 @@
-import { useParams } from "react-router-dom";
-import usePokemonDetailsQuery from "../hooks/usePokemonDetailsQuery";
+import { Navigate, useParams } from "react-router-dom";
+import {
+  usePokemonQuery,
+  usePokemonEvolutionChainQuery,
+  usePokemonSpeciesQuery,
+  usePokemonWeaknessesQuery,
+} from "@/hooks/usePokemon";
 import PokemonCardDetails from "@/components/PokemonCardDetails";
 import Loader from "@/components/Loader";
 import ErrorCard from "@/components/ErrorCard";
-import { usePokemonSpeciesQuery } from "@/hooks/usePokemonSpeciesQuery";
-import usePokemonWeaknessesQuery from "@/hooks/usePokemonWeaknessesQuery";
 
 function PokemonDetailsPage() {
-  const { name } = useParams();
+  const { id } = useParams();
+  const parsedId = id ? Number(id) : NaN;
 
   const {
     data: pokemon,
     isLoading,
     error,
-  } = usePokemonDetailsQuery({
-    idOrName: name!,
+  } = usePokemonQuery({
+    idOrName: parsedId!,
   });
 
   const species = usePokemonSpeciesQuery({
-    id: pokemon?.id,
-    name: name?.split("-")[0],
+    id: parsedId,
+    name: pokemon?.name.split("-")[0],
   });
   const weaknesses = usePokemonWeaknessesQuery({ types: pokemon?.types });
 
-  if (isLoading || species?.isLoading || weaknesses?.isLoading)
+  const evolutionChain = usePokemonEvolutionChainQuery({
+    url: species?.data?.evolution_chain.url || "",
+  });
+
+  if (
+    isLoading ||
+    species?.isLoading ||
+    weaknesses?.isLoading ||
+    evolutionChain?.isLoading
+  )
     return (
       <div className="flex flex-col justify-center items-center h-screen">
         <Loader />
       </div>
     );
+
+  if (isNaN(parsedId) || parsedId < 1) {
+    return <Navigate to="/404" />;
+  }
 
   if (error || species?.error || weaknesses?.error)
     return (
@@ -53,6 +70,7 @@ function PokemonDetailsPage() {
             pokemon={pokemon}
             species={species.data}
             weaknesses={weaknesses.data}
+            evolutionChain={evolutionChain.data}
           />
         )}
       </div>

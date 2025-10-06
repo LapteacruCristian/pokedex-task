@@ -8,7 +8,7 @@ interface PokemonWeaknessesResult {
   error: Error | null;
 }
 
-export default function usePokemonWeaknessesQuery({
+export function usePokemonWeaknessesQuery({
   types,
 }: {
   types: Pokemon["types"] | undefined;
