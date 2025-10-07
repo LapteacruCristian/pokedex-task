@@ -9,7 +9,7 @@ export interface PokemonPreview {
       };
     };
   };
-  types: Array<PokemonType>;
+  types: Array<{ type: PokemonType }>;
 }
 
 export interface Pokemon {
@@ -33,16 +33,26 @@ export interface Pokemon {
       };
     };
   };
-  types: Array<PokemonType>;
-  abilities: Array<{ ability: { name: string } }>;
-  stats: Array<{ stat: { name: string }; base_stat: number }>;
+  types: Array<{ type: PokemonType }>;
+  abilities: Array<{ ability: PokemonAbility }>;
+  stats: Array<PokemonStat>;
 }
 
 export interface PokemonType {
-  type: {
+  name: string;
+  url: string;
+}
+
+export interface PokemonAbility {
+  name: string;
+  url: string;
+}
+export interface PokemonStat {
+  stat: {
     name: string;
     url: string;
   };
+  base_stat: number;
 }
 
 export interface PokemonSpecies {
@@ -59,7 +69,15 @@ export interface PokemonSpecies {
   gender_rate: number;
 }
 
-export interface PokemonWeakness {
+export interface Type {
+  id: number;
   name: string;
-  url: string;
+  pokemon: Array<{
+    pokemon: { name: string; url: string };
+  }>;
+  damage_relations: {
+    double_damage_from: Array<PokemonType>;
+  };
+  isLoading: boolean;
+  error: Error | null;
 }

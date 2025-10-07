@@ -3,7 +3,7 @@ import type { PokemonType } from "@/lib/types";
 export default function PokemonTypeBadge({
   typeName,
 }: {
-  typeName: PokemonType["type"]["name"];
+  typeName: PokemonType["name"];
 }) {
   return (
     <span

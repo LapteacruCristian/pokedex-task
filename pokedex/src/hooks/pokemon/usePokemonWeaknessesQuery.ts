@@ -1,9 +1,9 @@
 import { useQueries } from "@tanstack/react-query";
 import { fetchPokemonType } from "@/lib/api";
-import type { Pokemon, PokemonWeakness } from "@/lib/types";
+import type { Pokemon, PokemonType } from "@/lib/types";
 
 interface PokemonWeaknessesResult {
-  data: Array<PokemonWeakness>;
+  data: Array<PokemonType>;
   isLoading: boolean;
   error: Error | null;
 }
@@ -16,9 +16,9 @@ export function usePokemonWeaknessesQuery({
   const queries = useQueries({
     queries:
       types?.map((type) => ({
-        queryKey: ["pokemonWeaknesses", type.type.url],
-        queryFn: () => fetchPokemonType(type.type.url),
-        enabled: !!type.type.url,
+        queryKey: ["pokemonType", type.type.name],
+        queryFn: () => fetchPokemonType(type.type.name),
+        enabled: !!type.type.name,
       })) ?? [],
   });
 

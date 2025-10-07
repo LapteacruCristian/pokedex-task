@@ -5,6 +5,8 @@ export const endpoints = {
     `${API}/pokemon?limit=${limit}&offset=${offset}`,
   pokemon: (idOrName: string | number) => `${API}/pokemon/${idOrName}`,
   species: (idOrName: string | number) => `${API}/pokemon-species/${idOrName}`,
+  type: (idOrName: string | number) => `${API}/type/${idOrName}`,
+  allTypes: () => `${API}/type`,
 };
 
 export const fetchPokemons = async (page = 1, limit = 20) => {
@@ -31,8 +33,14 @@ export const fetchPokemonSpecies = async (id: number, name: string) => {
   return response.json();
 };
 
-export const fetchPokemonType = async (url: string) => {
-  const response = await fetch(url);
+export const fetchPokemonType = async (idOrName: string | number) => {
+  const response = await fetch(endpoints.type(idOrName));
+  if (!response.ok) throw new Error("Network response was not ok");
+  return response.json();
+};
+
+export const fetchTypes = async () => {
+  const response = await fetch(endpoints.allTypes());
   if (!response.ok) throw new Error("Network response was not ok");
   return response.json();
 };

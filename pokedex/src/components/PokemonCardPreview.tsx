@@ -10,7 +10,7 @@ interface PokemonCardPreviewProps {
 function PokemonCardPreview({ pokemon }: PokemonCardPreviewProps) {
   return (
     <Link to={`/pokemon/${pokemon.id}`}>
-      <Card className="border-border hover:scale-103 transition-transform duration-200 ease-in-out relative gap-2 shadow-lg max-w-[250px] sm:max-w-[270px] mx-auto pt-0">
+      <Card className="select-none border-border hover:scale-103 transition-transform duration-200 ease-in-out relative gap-2 shadow-lg max-w-[250px] sm:max-w-[270px] mx-auto pt-0">
         <CardHeader className="h-10">
           <img
             className="w-20 h-20 absolute -top-10 left-1/2 transform -translate-x-1/2"

@@ -5,7 +5,7 @@ import type {
   Pokemon,
   PokemonPreview,
   PokemonSpecies,
-  PokemonWeakness,
+  PokemonType,
 } from "../lib/types";
 import { MarsIcon, VenusIcon, CircleSmall, ArrowRight } from "lucide-react";
 import PokemonTypeBadge from "./PokemonTypeBadge";
@@ -28,7 +28,7 @@ import {
 interface PokemonCardDetailsProps {
   pokemon: Pokemon;
   species: PokemonSpecies;
-  weaknesses: Array<PokemonWeakness>;
+  weaknesses: Array<PokemonType>;
   evolutionChain?: PokemonPreview[][];
 }
 
@@ -172,19 +172,15 @@ function PokemonAbilities({ abilities }: { abilities: Pokemon["abilities"] }) {
     <div>
       <h4>ABILITIES</h4>
       <div className="flex flex-row justify-center gap-2 text-muted-foreground capitalize ">
-        {abilities.map((abilityInfo) => (
-          <span key={abilityInfo.ability.name}>{abilityInfo.ability.name}</span>
+        {abilities.map((abilityInfo, index) => (
+          <span key={index}>{abilityInfo.ability.name}</span>
         ))}
       </div>
     </div>
   );
 }
 
-function PokemonWeaknesses({
-  weaknesses,
-}: {
-  weaknesses: Array<PokemonWeakness>;
-}) {
+function PokemonWeaknesses({ weaknesses }: { weaknesses: Array<PokemonType> }) {
   if (weaknesses.length === 0) {
     return <p>This Pokémon has no weaknesses.</p>;
   }

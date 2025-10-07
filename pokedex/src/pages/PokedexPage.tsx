@@ -1,22 +1,26 @@
+import { useState } from "react";
 import { Navigate, useSearchParams } from "react-router-dom";
 import PokemonCardPreview from "../components/PokemonCardPreview";
 import ErrorCard from "@/components/ErrorCard";
 import Loader from "@/components/Loader";
-import { usePokemonQuery } from "../hooks/usePokemon";
 import SearchBar from "@/components/SearchBar";
 import GridPagination from "@/components/GridPagination";
-import { useState } from "react";
 import useDebounce from "@/hooks/useDebounce";
-import { usePokemonsQuery } from "@/hooks/usePokemon";
+import FilterBar from "@/components/FilterBar";
+import {
+  usePokemonQuery,
+  usePokemonsQuery,
+  usePokemonsByTypeQuery,
+} from "../hooks/usePokemon";
 
 function PokedexPage() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const page = Number(searchParams.get("page") || "1");
+  const filterParams = searchParams.get("type") || "";
 
+  const page = Number(searchParams.get("page") || "1");
   const perPage = 20;
 
   const [searchTerm, setSearchTerm] = useState("");
-
   const searchTermdebounced = useDebounce(searchTerm, 1000);
 
   const { data, isLoading, error } = usePokemonsQuery({ page, perPage });
@@ -27,6 +31,14 @@ function PokedexPage() {
     error: searchError,
   } = usePokemonQuery({
     idOrName: searchTermdebounced.trim().toLowerCase().replace(/\s+/g, "-"),
+  });
+
+  const {
+    data: filterData,
+    isLoading: isFilterLoading,
+    error: filterError,
+  } = usePokemonsByTypeQuery({
+    idOrName: filterParams,
   });
 
   if (page < 1 || isNaN(page)) {
@@ -48,16 +60,19 @@ function PokedexPage() {
   return (
     <main>
       <SearchBar
-        className="mb-16"
+        className="mb-8"
         placeholder="Search your Pokémon!"
-        disabled={isLoading}
+        disabled={isLoading || isFilterLoading}
         searchTerm={searchTerm}
         onChange={setSearchTerm}
       />
+      <div className="flex flex-row justify-center gap-4 items-center mb-16">
+        <FilterBar />
+      </div>
 
-      {isLoading || isSearchLoading ? (
+      {isLoading || isSearchLoading || isFilterLoading ? (
         <Loader />
-      ) : searchError ? (
+      ) : searchError || filterError ? (
         <ErrorCard
           title="No Pokémon match your search."
           description="Please check the name and try again."
@@ -69,6 +84,12 @@ function PokedexPage() {
               <li key={searchData.id}>
                 <PokemonCardPreview key={searchData.id} pokemon={searchData} />
               </li>
+            ) : filterData.results.length > 0 ? (
+              filterData.results.map((pokemon) => (
+                <li key={pokemon.id}>
+                  <PokemonCardPreview pokemon={pokemon} />
+                </li>
+              ))
             ) : (
               data.results.map((pokemon) => (
                 <li key={pokemon.id}>
@@ -77,8 +98,8 @@ function PokedexPage() {
               ))
             )}
           </ul>
-
-          {!searchData && (
+          {!data.next && <ErrorCard title="No Pokémon found." />}
+          {!searchData && filterData.results.length === 0 && data.next && (
             <div className="flex justify-center items-center mt-8">
               <GridPagination
                 page={page}

@@ -36,7 +36,6 @@ export function usePokemonEvolutionChainQuery({
   const evolutionIds = chainQuery.data?.chain
     ? extractEvolutionChainIds(chainQuery.data.chain)
     : [];
-  console.log(evolutionIds);
 
   const queries = useQueries({
     queries: evolutionIds.map((index) => ({
