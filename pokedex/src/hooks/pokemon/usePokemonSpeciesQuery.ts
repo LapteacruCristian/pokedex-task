@@ -9,11 +9,10 @@ export function usePokemonSpeciesQuery({
   id?: number;
   name?: string;
 }) {
-  let query = useQuery<PokemonSpecies>({
+  return useQuery<PokemonSpecies>({
     queryKey: ["pokemonSpecies", id, name],
     queryFn: () => fetchPokemonSpecies(id!, name!),
     enabled: !!id && !!name,
     retry: false,
   });
-  return query;
 }
