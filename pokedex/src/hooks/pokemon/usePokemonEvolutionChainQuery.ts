@@ -1,7 +1,8 @@
-import { useQueries, useQuery } from "@tanstack/react-query";
-import { endpoints, fetchApi } from "@/lib/api";
+import { useQuery } from "@tanstack/react-query";
+import { fetchApi } from "@/lib/api";
 import type { PokemonPreview } from "@/lib/types";
 import { getIdFromUrl } from "@/lib/utils";
+import { useNestedPokemonDetailsQueries } from "./useNestedPokemonDetailsQueries";
 
 interface EvolutionNode {
   species: {
@@ -32,25 +33,19 @@ export function usePokemonEvolutionChainQuery({
     enabled: !!url,
     retry: false,
   });
+
   const evolutionIds = chainQuery.data?.chain
     ? extractEvolutionChainIds(chainQuery.data.chain)
     : [];
 
-  const queries = useQueries({
-    queries: evolutionIds.map((index) => ({
-      queryKey: ["pokemon", url, index],
-      queryFn: () =>
-        Promise.all(index.map((id) => fetchApi(endpoints.pokemon(id)))),
-    })),
-  });
+  const {
+    data: details,
+    isLoading,
+    error,
+  } = useNestedPokemonDetailsQueries({ ids: evolutionIds });
 
-  const data = queries.map((query) => query.data).filter(Boolean) as
-    | PokemonPreview[][]
-    | undefined;
-  const isLoading = queries.some((query) => query.isLoading);
-  const error = queries.find((query) => query.error)?.error || null;
   return {
-    data: data || [],
+    data: details || [],
     isLoading: chainQuery.isLoading || isLoading,
     error: chainQuery.error || error || null,
   };

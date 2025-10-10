@@ -1,8 +1,7 @@
 import { usePokemonsPageQuery } from "../pokemon/usePokemonsPageQuery";
 import type { PokemonPreview } from "../../lib/types";
 import { getIdFromUrl } from "@/lib/utils";
-import { useQueries } from "@tanstack/react-query";
-import { endpoints, fetchApi } from "@/lib/api";
+import { usePokemonDetailsQueries } from "./usePokemonDetailsQueries";
 
 interface PokemonsDetailsResult {
   data: {
@@ -33,24 +32,20 @@ export function usePokemonsQuery({
   const ids =
     listData?.results.map((pokemon) => getIdFromUrl(pokemon.url)) || [];
 
-  const queries = useQueries({
-    queries:
-      ids?.map((id) => ({
-        queryKey: ["pokemon", id],
-        queryFn: () => fetchApi<PokemonPreview>(endpoints.pokemon(id)),
-      })) || [],
-  });
+  const {
+    data: results,
+    isLoading: isDetailsLoading,
+    error: detailsError,
+  } = usePokemonDetailsQueries({ ids });
 
   return {
     data: {
-      results: queries
-        .map((query) => query.data)
-        .filter(Boolean) as PokemonPreview[],
+      results,
       count: listData?.count || 0,
       next: listData?.next || null,
       previous: listData?.previous || null,
     },
-    isLoading: isListLoading || queries.some((query) => query.isLoading),
-    error: listError || queries.find((query) => query.error)?.error || null,
+    isLoading: isListLoading || isDetailsLoading,
+    error: listError || detailsError || null,
   };
 }
