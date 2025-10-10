@@ -46,7 +46,7 @@ export default function PokemonCardDetails({
   return (
     <Card className="relative border-border shadow-lg max-w-[420px] mx-auto gap-3 pt-0">
       <PokemonCardHeader pokemon={pokemon} genderRate={genderRate} />
-      <CardContent className="display-flex flex-col items-center space-y-3">
+      <CardContent className="flex flex-col items-center space-y-3">
         <p className="m-0">#{pokemon.id}</p>
         <h1 className="capitalize">{pokemon.name}</h1>
         <TypeBadges types={pokemon.types} />
