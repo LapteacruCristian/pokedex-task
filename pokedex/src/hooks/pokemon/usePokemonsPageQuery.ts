@@ -1,5 +1,5 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { fetchPokemons } from "../../lib/api";
+import { endpoints, fetchApi } from "../../lib/api";
 
 interface PokemonsQueryResult {
   count: number;
@@ -20,9 +20,11 @@ export function usePokemonsPageQuery({
   page,
   perPage = 20,
 }: UsePokemonsQueryProps) {
-  return useQuery<PokemonsQueryResult>({
+  const offset = (page - 1) * perPage;
+  return useQuery({
     queryKey: ["pokemons", page, perPage],
-    queryFn: () => fetchPokemons(page, perPage),
+    queryFn: () =>
+      fetchApi<PokemonsQueryResult>(endpoints.list(perPage, offset)),
     placeholderData: keepPreviousData,
   });
 }

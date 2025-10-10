@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchPokemonDetails } from "../../lib/api";
+import { endpoints, fetchApi } from "../../lib/api";
 import type { Pokemon } from "../../lib/types";
 
 export function usePokemonQuery({ idOrName }: { idOrName: number | string }) {
-  return useQuery<Pokemon>({
+  return useQuery({
     queryKey: ["pokemon", idOrName],
-    queryFn: () => fetchPokemonDetails(idOrName),
+    queryFn: () => fetchApi<Pokemon>(endpoints.pokemon(idOrName)),
     enabled: !!idOrName,
     retry: false,
   });

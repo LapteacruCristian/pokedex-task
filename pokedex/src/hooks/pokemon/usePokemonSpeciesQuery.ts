@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchPokemonSpecies } from "@/lib/api";
+import { fetchApi, endpoints } from "@/lib/api";
 import type { PokemonSpecies } from "@/lib/types";
 
 export function usePokemonSpeciesQuery({
@@ -9,9 +9,13 @@ export function usePokemonSpeciesQuery({
   id?: number;
   name?: string;
 }) {
-  return useQuery<PokemonSpecies>({
+  return useQuery({
     queryKey: ["pokemonSpecies", id, name],
-    queryFn: () => fetchPokemonSpecies(id!, name!),
+    queryFn: () => {
+      if (id && id < 10000)
+        return fetchApi<PokemonSpecies>(endpoints.species(id));
+      return fetchApi<PokemonSpecies>(endpoints.species(name!));
+    },
     enabled: !!id && !!name,
     retry: false,
   });

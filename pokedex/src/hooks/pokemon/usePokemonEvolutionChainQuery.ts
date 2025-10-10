@@ -1,8 +1,7 @@
 import { useQueries, useQuery } from "@tanstack/react-query";
-import { fetchEvolutionChain } from "@/lib/api";
+import { endpoints, fetchApi } from "@/lib/api";
 import type { PokemonPreview } from "@/lib/types";
 import { getIdFromUrl } from "@/lib/utils";
-import { fetchPokemonDetails } from "@/lib/api";
 
 interface EvolutionNode {
   species: {
@@ -27,9 +26,9 @@ export function usePokemonEvolutionChainQuery({
 }: {
   url: string;
 }): usePokemonEvolutionChain {
-  const chainQuery = useQuery<EvolutionChainResponse>({
+  const chainQuery = useQuery({
     queryKey: ["evolutionChain", url],
-    queryFn: () => fetchEvolutionChain(url),
+    queryFn: () => fetchApi<EvolutionChainResponse>(url),
     enabled: !!url,
     retry: false,
   });
@@ -40,7 +39,8 @@ export function usePokemonEvolutionChainQuery({
   const queries = useQueries({
     queries: evolutionIds.map((index) => ({
       queryKey: ["pokemon", url, index],
-      queryFn: () => Promise.all(index.map((id) => fetchPokemonDetails(id))),
+      queryFn: () =>
+        Promise.all(index.map((id) => fetchApi(endpoints.pokemon(id)))),
     })),
   });
 

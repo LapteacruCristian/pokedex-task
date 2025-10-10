@@ -2,7 +2,7 @@ import { usePokemonsPageQuery } from "../pokemon/usePokemonsPageQuery";
 import type { PokemonPreview } from "../../lib/types";
 import { getIdFromUrl } from "@/lib/utils";
 import { useQueries } from "@tanstack/react-query";
-import { fetchPokemonDetails } from "@/lib/api";
+import { endpoints, fetchApi } from "@/lib/api";
 
 interface PokemonsDetailsResult {
   data: {
@@ -37,7 +37,7 @@ export function usePokemonsQuery({
     queries:
       ids?.map((id) => ({
         queryKey: ["pokemon", id],
-        queryFn: () => fetchPokemonDetails(id),
+        queryFn: () => fetchApi<PokemonPreview>(endpoints.pokemon(id)),
       })) || [],
   });
 

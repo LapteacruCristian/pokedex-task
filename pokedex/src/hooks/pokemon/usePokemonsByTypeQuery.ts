@@ -1,6 +1,6 @@
 import type { PokemonPreview, Type } from "@/lib/types";
 import { useQueries, useQuery } from "@tanstack/react-query";
-import { fetchPokemonDetails, fetchPokemonType } from "@/lib/api";
+import { endpoints, fetchApi } from "@/lib/api";
 import { getIdFromUrl } from "@/lib/utils";
 
 interface UsePokemonsByTypeResult {
@@ -14,9 +14,9 @@ export function usePokemonsByTypeQuery({
 }: {
   idOrName: string | number;
 }): UsePokemonsByTypeResult {
-  const query = useQuery<Type>({
+  const query = useQuery({
     queryKey: ["pokemonType", idOrName],
-    queryFn: () => fetchPokemonType(idOrName),
+    queryFn: () => fetchApi<Type>(endpoints.type(idOrName)),
     enabled: !!idOrName,
     retry: false,
   });
@@ -25,7 +25,7 @@ export function usePokemonsByTypeQuery({
     queries:
       ids.map((id) => ({
         queryKey: ["pokemon", id],
-        queryFn: () => fetchPokemonDetails(id),
+        queryFn: () => fetchApi<PokemonPreview>(endpoints.pokemon(id)),
         enabled: !!id,
       })) ?? [],
   });

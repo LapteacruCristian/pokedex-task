@@ -9,43 +9,7 @@ export const endpoints = {
   allTypes: () => `${API}/type`,
 };
 
-export const fetchPokemons = async (page = 1, limit = 20) => {
-  const offset = (page - 1) * limit;
-  const response = await fetch(endpoints.list(limit, offset));
-  if (!response.ok) throw new Error("Network response was not ok");
-  return response.json();
-};
-
-export const fetchPokemonDetails = async (idOrName: string | number) => {
-  const response = await fetch(endpoints.pokemon(idOrName));
-  if (!response.ok) throw new Error("Network response was not ok");
-  return response.json();
-};
-
-export const fetchPokemonSpecies = async (id: number, name: string) => {
-  let response;
-  if (id > 10000) {
-    response = await fetch(endpoints.species(name));
-  } else {
-    response = await fetch(endpoints.species(id));
-  }
-  if (!response.ok) throw new Error("Network response was not ok");
-  return response.json();
-};
-
-export const fetchPokemonType = async (idOrName: string | number) => {
-  const response = await fetch(endpoints.type(idOrName));
-  if (!response.ok) throw new Error("Network response was not ok");
-  return response.json();
-};
-
-export const fetchTypes = async () => {
-  const response = await fetch(endpoints.allTypes());
-  if (!response.ok) throw new Error("Network response was not ok");
-  return response.json();
-};
-
-export const fetchEvolutionChain = async (url: string) => {
+export const fetchApi = async <T>(url: string): Promise<T> => {
   const response = await fetch(url);
   if (!response.ok) throw new Error("Network response was not ok");
   return response.json();
