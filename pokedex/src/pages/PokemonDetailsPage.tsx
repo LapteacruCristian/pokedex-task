@@ -4,7 +4,7 @@ import {
   usePokemonEvolutionChainQuery,
   usePokemonSpeciesQuery,
   usePokemonWeaknessesQuery,
-} from "@/hooks/usePokemon";
+} from "@/hooks/pokemon";
 import PokemonCardDetails from "@/components/PokemonCardDetails";
 import Loader from "@/components/Loader";
 import ErrorCard from "@/components/ErrorCard";

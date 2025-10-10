@@ -11,7 +11,7 @@ import {
   usePokemonQuery,
   usePokemonsQuery,
   usePokemonsByTypeQuery,
-} from "../hooks/usePokemon";
+} from "../hooks/pokemon";
 
 function PokedexPage() {
   const [searchParams, setSearchParams] = useSearchParams();

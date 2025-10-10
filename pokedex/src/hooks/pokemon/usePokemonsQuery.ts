@@ -1,4 +1,4 @@
-import { usePokemonsPageQuery } from "./usePokemonsPageQuery";
+import { usePokemonsPageQuery } from "../pokemon/usePokemonsPageQuery";
 import type { PokemonPreview } from "../../lib/types";
 import { getIdFromUrl } from "@/lib/utils";
 import { useQueries } from "@tanstack/react-query";
