@@ -23,7 +23,7 @@ export default function GridPagination({
         <PaginationItem>
           <PaginationPrevious
             className={` ${!previous ? "pointer-events-none opacity-50" : ""}`}
-            href={`${page === 2 ? "/" : `?page=${page - 1}`}`}
+            to={`${page === 2 ? "/" : `?page=${page - 1}`}`}
           >
             Previous
           </PaginationPrevious>
@@ -34,7 +34,7 @@ export default function GridPagination({
         <PaginationItem>
           <PaginationNext
             className={` ${!next ? "pointer-events-none opacity-50" : ""}`}
-            href={`?page=${next ? page + 1 : page}`}
+            to={`?page=${next ? page + 1 : page}`}
           >
             Next
           </PaginationNext>
