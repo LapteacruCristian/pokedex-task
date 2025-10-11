@@ -23,7 +23,7 @@ export default function SearchBar({
       <Input
         type="search"
         value={searchTerm}
-        className="rounded-xl p-8 md:text-base"
+        className=" p-6 md:p-8 rounded-lg md:rounded-xl md:text-base"
         placeholder={placeholder}
         onChange={(e) => onChange(e.target.value)}
         disabled={disabled}

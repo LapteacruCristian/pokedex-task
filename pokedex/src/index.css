@@ -14,6 +14,8 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
+  scrollbar-color: var(--border) var(--background);
+
   --radius: 0.65rem;
   --background: #faf9f5;
   --foreground: #3d3929;
@@ -124,7 +126,7 @@
     @apply min-h-full;
   }
   main {
-    @apply max-w-7xl mx-auto text-center h-auto w-11/12 lg:w-9/12 py-4;
+    @apply flex flex-col max-w-7xl min-h-[440px] mx-auto text-center w-11/12 lg:w-9/12 p-4;
   }
   button {
     @apply cursor-pointer;

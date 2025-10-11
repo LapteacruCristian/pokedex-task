@@ -5,24 +5,27 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { cn } from "@/lib/utils";
 
 interface GridPaginationProps {
   page: number;
-  previous: boolean;
-  next: boolean;
+  previousDisabled: boolean;
+  nextDisabled: boolean;
+  className?: React.HTMLAttributes<HTMLDivElement>["className"];
 }
 
 export default function GridPagination({
   page,
-  previous,
-  next,
+  previousDisabled,
+  nextDisabled,
+  className,
 }: GridPaginationProps) {
   return (
-    <Pagination>
+    <Pagination className={cn("flex justify-center items-center", className)}>
       <PaginationContent>
         <PaginationItem>
           <PaginationPrevious
-            className={` ${!previous ? "pointer-events-none opacity-50" : ""}`}
+            className={` ${previousDisabled ? "pointer-events-none opacity-50" : ""}`}
             to={`${page === 2 ? "/" : `?page=${page - 1}`}`}
           >
             Previous
@@ -33,8 +36,8 @@ export default function GridPagination({
         </PaginationItem>
         <PaginationItem>
           <PaginationNext
-            className={` ${!next ? "pointer-events-none opacity-50" : ""}`}
-            to={`?page=${next ? page + 1 : page}`}
+            className={` ${nextDisabled ? "pointer-events-none opacity-50" : ""}`}
+            to={`?page=${!nextDisabled ? page + 1 : page}`}
           >
             Next
           </PaginationNext>

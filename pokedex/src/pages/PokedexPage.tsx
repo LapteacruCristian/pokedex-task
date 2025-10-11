@@ -57,28 +57,36 @@ function PokedexPage() {
     );
   }
 
+  const showLoader = isLoading || isSearchLoading || isFilterLoading;
+  const showError = !!searchError || !!filterError || !data.results.length;
+  const showPagination =
+    !searchData &&
+    !filterData.results.length &&
+    !!data.results.length &&
+    !showError;
+
   return (
-    <main>
+    <main className="overflow-y-hidden h-screen">
       <SearchBar
-        className="mb-8"
+        className="mb-4"
         placeholder="Search your Pokémon!"
         disabled={isLoading || isFilterLoading}
         searchTerm={searchTerm}
         onChange={setSearchTerm}
       />
-      <div className="flex flex-row justify-center gap-4 items-center mb-16">
-        <FilterBar />
-      </div>
+      <FilterBar
+        disabled={isLoading || isFilterLoading || !!searchTermdebounced}
+      />
 
-      {isLoading || isSearchLoading || isFilterLoading ? (
-        <Loader />
-      ) : searchError || filterError ? (
-        <ErrorCard
-          title="No Pokémon match your search."
-          description="Please check the name and try again."
-        />
-      ) : (
-        <section>
+      <section className="flex-1 overflow-y-auto pt-12 pb-4 px-4 mt-4">
+        {showLoader ? (
+          <Loader />
+        ) : showError ? (
+          <ErrorCard
+            title="No Pokémon found."
+            description="Try adjusting your search or filter to find what you're looking for."
+          />
+        ) : (
           <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-16">
             {searchData ? (
               <li key={searchData.id}>
@@ -98,17 +106,15 @@ function PokedexPage() {
               ))
             )}
           </ul>
-          {!data.next && <ErrorCard title="No Pokémon found." />}
-          {!searchData && filterData.results.length === 0 && data.next && (
-            <div className="flex justify-center items-center mt-8">
-              <GridPagination
-                page={page}
-                next={!data?.next ? false : true}
-                previous={!data?.previous ? false : true}
-              />
-            </div>
-          )}
-        </section>
+        )}
+      </section>
+      {showPagination && (
+        <GridPagination
+          page={page}
+          previousDisabled={!data?.previous || showLoader}
+          nextDisabled={!data?.next || showLoader}
+          className="mt-4"
+        />
       )}
     </main>
   );
